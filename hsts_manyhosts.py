@@ -42,14 +42,27 @@ while i<len(domains):
  http = PoolManager(timeout=Timeout(read=2.0))
  try:
   check = http.request('GET', url, headers={'User-Agent':'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:40.0) Gecko/20100101 Firefox/40.1'},timeout=2)
-  if 'strict-transport-security' in check.headers:
-   print str(i) + ': ' + url + ': is using HSTS!!!'
-   i+=1
-   using+=1
-  else:
-   print str(i) + ': ' + url + ': is NOT using HSTS'
-   notusing+=1
-   i+=1
+  response=check.headers
+  if 'strict-transport-security' in response:
+    print "[+] " +site + ': is using HSTS!!!'
+    if 'preload' in str(response):
+        print "  [+] Preload enabled"
+    else:
+    	print "  [Warning!] Preload is not configured"    
+    if 'includeSubDomains' in str(response):
+       print "  [+] includeSubdomains is present"
+    else:
+       print "  [Warning!] includeSubDomains is not configured"
+    if 'max-age=31536000' in str(response):
+	print "  [+] max-age is set to two years - well done"
+    else:
+	print "  [Warning!] max-age should really be set to two years (31536000)"
+    if DEBUG:
+        print str(response)
+else:
+    print site + ': is NOT using HSTS'
+    if DEBUG:
+        print str(response)
  # check = requests.get(url, headers={'User-Agent':'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:40.0) Gecko/20100101 Firefox/40.1'},timeout=2)
  except requests.exceptions.RequestException as e:
   print e
