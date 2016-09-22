@@ -59,10 +59,10 @@ while i<len(domains):
 	print "  [Warning!] max-age should really be set to two years (31536000)"
     if DEBUG:
         print str(response)
-else:
-    print site + ': is NOT using HSTS'
-    if DEBUG:
-        print str(response)
+    else:
+        print site + ': is NOT using HSTS'
+        if DEBUG:
+            print str(response)
  # check = requests.get(url, headers={'User-Agent':'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:40.0) Gecko/20100101 Firefox/40.1'},timeout=2)
  except requests.exceptions.RequestException as e:
   print e
